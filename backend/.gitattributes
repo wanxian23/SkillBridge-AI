@@ -1,0 +1,11 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+target/
