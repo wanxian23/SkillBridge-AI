@@ -93,21 +93,25 @@ Learning resources may initially use curated external links.
 
 ## Current Development Status
 
-The initial development environment has been established.
+The initial development environment is established. The team is beginning frontend UI development based on its completed prototype design. Backend API integration will take place later.
 
 | Component | Current Status |
 |---|---|
-| Git and GitHub repository | Set up |
-| React + Vite frontend | Created; default starter page available |
+| Git and GitHub repository | Set up; `main` has a branch ruleset |
+| React + Vite frontend | Created and running locally |
+| React Router | Installed; initial routes and placeholder Login, Register, and Job Seeker Dashboard pages created |
+| Axios | Installed; shared API client configuration prepared, not yet connected to working endpoints |
+| ESLint | Configured and lint check passing at time of setup |
+| Frontend environment variables | `frontend/.env.example` provided; each developer creates their own `frontend/.env` |
+| UI prototype | Completed; implementation of actual page designs is beginning |
 | Spring Boot backend | Created and successfully started in Docker |
 | MySQL database | Running in Docker and connected to Spring Boot |
-| Docker Compose | Configured for the backend and database services |
-| Environment variable configuration | Set up using `.env` and `.env.example` |
-| Application pages and UI | Pending development |
-| Backend APIs | Pending development |
+| Docker Compose | Configured for backend and database services |
+| Backend APIs and authentication | Pending development |
 | Application database tables | Pending development |
-| Authentication and user management | Pending development |
 | Job matching and AI features | Pending development |
+
+The placeholder pages and routes are for navigation testing only. They do not yet provide working authentication or role-based authorization.
 
 ## Technologies Used
 
@@ -115,6 +119,8 @@ The initial development environment has been established.
 |---|---|
 | React | Frontend user interface |
 | Vite | Frontend development server and build tool |
+| React Router | Client-side page navigation |
+| Axios | HTTP client prepared for future Spring Boot API integration |
 | Java 17 | Backend programming language |
 | Spring Boot | Backend application development |
 | Spring Data JPA | Database access and persistence support |
@@ -143,83 +149,79 @@ On Windows, PowerShell is used for the commands in this README.
 
 ## Getting Started
 
-### 1. Clone the repository
+### 1. Clone or pull the repository
 
-Replace `<your-github-repository-url>` with the actual URL of the GitHub repository.
+New contributors can clone the repository (replace the URL with the actual repository URL):
 
 ```powershell
 git clone <your-github-repository-url>
 cd skillbridge-ai
 ```
 
-### 2. Configure the environment variables
+Existing contributors should switch to `main` and pull the latest changes using GitHub Desktop or Git. Create a feature branch before making changes.
 
-Create a local `.env` file from the provided example:
+### 2. Frontend-only setup (recommended for current UI development)
+
+You **do not need Docker, Spring Boot, or MySQL** to work on the frontend UI and placeholder pages.
+
+From the project root:
+
+```powershell
+cd frontend
+npm.cmd ci
+Copy-Item .env.example .env
+npm.cmd run dev
+```
+
+Open the local address displayed by Vite, usually `http://localhost:5173/`.
+
+The frontend `.env` file should contain:
+
+```dotenv
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+The API URL is prepared for future integration; no working `/api` endpoints are required to view the current placeholder pages. Restart Vite after changing `.env`.
+
+To check code quality, open another terminal in `frontend/` and run:
+
+```powershell
+npm.cmd run lint
+```
+
+Use `npm.cmd ci` when setting up a fresh checkout with the committed lockfile. Use `npm.cmd install <package>` only when intentionally adding or updating a dependency; commit both `package.json` and `package-lock.json` when they change.
+
+### 3. Optional: set up the backend and database
+
+Backend work and integration require Docker Desktop. From the **project root**, copy the root environment template:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Open `.env` in a text editor and replace the placeholder passwords with your own values.
+Edit the root `.env` and replace example database passwords with private local values. `MYSQL_PASSWORD` and `SPRING_DATASOURCE_PASSWORD` must match; the MySQL root password can be different. Do not commit either `.env` file.
 
-Use separate passwords for the MySQL root account and the application database account. The `MYSQL_PASSWORD` and `SPRING_DATASOURCE_PASSWORD` values must match.
-
-Do not upload the `.env` file to GitHub or share its passwords.
-
-### 3. Start Docker Desktop
-
-Open Docker Desktop and wait until the Docker engine is running.
-
-### 4. Start the backend and database
-
-From the project root directory, run:
+Start Docker Desktop, then run from the project root:
 
 ```powershell
 docker compose up --build -d
-```
-
-This command builds the backend image if necessary and starts the backend and MySQL services in the background. On the first run, Docker may need to download the required images.
-
-Check the service status:
-
-```powershell
 docker compose ps
 ```
 
-The MySQL service should become healthy, and the backend should start successfully.
-
-### 5. Install frontend dependencies
-
-Open a terminal in the project root and run:
-
-```powershell
-cd frontend
-npm.cmd install
-```
-
-This installs the dependencies defined in the frontend's `package.json`.
-
-### 6. Start the frontend
-
-In the same terminal, run:
-
-```powershell
-npm.cmd run dev
-```
-
-Vite will display a local development URL, usually:
-
-`http://localhost:5173/`
-
-Open the URL in a web browser to access the frontend.
-
-Keep the terminal running while developing the frontend.
+The MySQL service should become healthy and the backend should start. The backend and database are not needed for frontend-only UI development.
 
 ## Environment Configuration
 
-The project uses environment variables to configure database credentials and backend settings.
+The project uses **two separate local environment files**:
 
-The root `.env.example` file provides placeholder values for the required configuration.
+| Location | Purpose | Tracked by Git? |
+|---|---|---|
+| Root `.env.example` | Template for Docker/MySQL/Spring Boot configuration | Yes |
+| Root `.env` | Private local database and backend settings | No |
+| `frontend/.env.example` | Template for Vite API URL | Yes |
+| `frontend/.env` | Local Vite API URL | No |
+
+The root `.env.example` documents these variables:
 
 | Variable | Purpose |
 |---|---|
@@ -227,77 +229,80 @@ The root `.env.example` file provides placeholder values for the required config
 | `MYSQL_DATABASE` | Name of the application database |
 | `MYSQL_USER` | MySQL application account username |
 | `MYSQL_PASSWORD` | Password for the MySQL application account |
-| `SPRING_DATASOURCE_URL` | Example Spring Boot database URL; the Compose configuration supplies the container-specific URL |
+| `SPRING_DATASOURCE_URL` | Example Spring Boot database URL; Compose supplies its container-specific URL |
 | `SPRING_DATASOURCE_USERNAME` | Spring Boot database username |
 | `SPRING_DATASOURCE_PASSWORD` | Spring Boot database password |
-| `SPRING_JPA_DDL_AUTO` | Hibernate schema management setting; currently defaults to `update` |
-| `SPRING_JPA_SHOW_SQL` | Controls whether Hibernate displays SQL statements in the logs |
+| `SPRING_JPA_DDL_AUTO` | Hibernate schema setting; currently defaults to `update` |
+| `SPRING_JPA_SHOW_SQL` | Whether Hibernate displays SQL in logs |
 
-The Compose configuration connects the backend to MySQL through the internal Docker service hostname `mysql`.
+The frontend uses `VITE_API_BASE_URL=http://localhost:8080/api` for its prepared Axios client. This address assumes future Spring Boot endpoints use the `/api` prefix. The backend endpoints have **not** been implemented yet.
 
-The example configuration is intended for local development. Production deployments will require appropriate secret management and deployment-specific configuration.
+Variables prefixed `VITE_` are exposed to browser code: **never store passwords, API keys, or secrets in frontend environment files**.
+
+Docker Compose connects the backend to MySQL through the internal hostname `mysql`. These configurations are for local development, not production secret management.
 
 ## Running the Project
 
-### Start the project
+### Frontend-only development (current workflow)
 
-Start Docker Desktop, then run the following command from the project root:
+From the project root:
+
+```powershell
+cd frontend
+npm.cmd run dev
+```
+
+Open the URL displayed by Vite, usually `http://localhost:5173/`. The backend and database do not need to be running while working on static UI, routing, or mock data.
+
+Stop Vite with `Ctrl + C`. Run `npm.cmd run lint` from `frontend/` to check the frontend code.
+
+### Backend and database (when needed)
+
+Start Docker Desktop. From the project root:
 
 ```powershell
 docker compose up -d
 ```
 
-Start the frontend in a separate terminal:
+If Java backend source files have changed and need rebuilding:
 
 ```powershell
-cd "D:\Project Development\skillbridge-ai\frontend"
-npm.cmd run dev
+docker compose up --build -d backend
 ```
 
-If the repository is located elsewhere, replace the example path with the actual project directory.
-
-### Stop the frontend
-
-Press `Ctrl + C` in the terminal running Vite.
-
-### Stop the backend and database
-
-From the project root, run:
+To stop the containers without deleting stored database data:
 
 ```powershell
 docker compose stop
 ```
 
-This stops the containers without deleting the database volume.
-
-### Resume development
-
-Start Docker Desktop and run:
-
-```powershell
-docker compose up -d
-```
-
-Then start Vite again using `npm.cmd run dev` from the `frontend` directory.
+Avoid `docker compose down -v` unless intentionally deleting the database volume and its contents.
 
 ## Accessing the Services
 
-The following local addresses and ports are configured for development.
-
 | Service | Address | Purpose |
 |---|---|---|
-| React + Vite frontend | `http://localhost:5173/` | Access the frontend |
-| Spring Boot backend | `http://localhost:8080/` | Backend application endpoint |
+| React + Vite frontend | `http://localhost:5173/` | Frontend UI and placeholder routes |
+| Spring Boot backend | `http://localhost:8080/` | Backend service; application APIs pending |
 | MySQL from the host computer | `127.0.0.1:3307` | Optional database client connection |
-| MySQL inside Docker | `mysql:3306` | Connection used by the backend container |
+| MySQL inside Docker | `mysql:3306` | Backend container's database connection |
 
-The MySQL port is mapped to `3307` on the host because the standard MySQL port `3306` may already be in use by a locally installed MySQL server.
+Current frontend routes include `/login`, `/register`, and `/jobseeker/dashboard`; `/` redirects to `/login`. These routes are placeholders and **not protected by real authentication** yet.
 
-The backend and frontend currently have no completed application integration. A working frontend URL does not mean that all application features or APIs are available.
+Host port `3307` is used for the Docker MySQL instance because local port `3306` may already be occupied. The frontend and backend are not yet integrated.
 
 ## Useful Commands
 
-Run Docker Compose commands from the project root directory.
+Run Docker Compose commands from the project root directory; run npm commands from `frontend/`.
+
+| Frontend command | Description |
+|---|---|
+| `npm.cmd ci` | Install exactly the dependencies from `package-lock.json` |
+| `npm.cmd run dev` | Start the Vite frontend development server |
+| `npm.cmd run lint` | Run ESLint checks |
+| `npm.cmd run build` | Build the frontend for production |
+
+Backend and Git commands:
 
 | Command | Description |
 |---|---|
@@ -320,14 +325,25 @@ Run Docker Compose commands from the project root directory.
 
 ## Project Directory Structure
 
-The repository currently follows this structure. Additional directories and files will be added as development progresses.
+The current frontend contains basic routing and service setup. Some organizational folders may still be empty locally; Git does not track empty folders.
 
 ```text
 skillbridge-ai/
 ├── frontend/
-│   ├── node_modules/       # Installed dependencies (not tracked by Git)
-│   ├── public/
+│   ├── .env                 # Local Vite config (ignored)
+│   ├── .env.example         # Shared Vite config template
+│   ├── public/              # Public assets, including project SVG
 │   ├── src/
+│   │   ├── assets/          # Images and other imported assets
+│   │   ├── components/      # Reusable UI components (as developed)
+│   │   ├── layouts/         # Shared page layouts (as developed)
+│   │   ├── pages/
+│   │   │   ├── auth/        # LoginPage, RegisterPage
+│   │   │   └── jobseeker/   # DashboardPage placeholder
+│   │   ├── routes/
+│   │   │   └── AppRoutes.jsx
+│   │   ├── services/
+│   │   │   └── api.js       # Shared Axios client
 │   │   ├── App.jsx
 │   │   ├── App.css
 │   │   ├── index.css
@@ -337,31 +353,24 @@ skillbridge-ai/
 │   ├── package.json
 │   ├── package-lock.json
 │   └── vite.config.js
-│
 ├── backend/
 │   ├── .dockerignore
 │   ├── Dockerfile
 │   ├── pom.xml
 │   └── src/
 │       ├── main/
-│       │   ├── java/
-│       │   │   └── com/skillbridge/backend/
-│       │   │       └── BackendApplication.java
-│       │   └── resources/
-│       │       └── application.properties
+│       │   ├── java/com/skillbridge/backend/BackendApplication.java
+│       │   └── resources/application.properties
 │       └── test/
-│
-├── .env                    # Local secrets; not tracked by Git
-├── .env.example            # Configuration template
+├── .env                    # Local Docker/backend secrets (ignored)
+├── .env.example            # Shared Docker/backend config template
 ├── .gitattributes
 ├── .gitignore
 ├── README.md
 └── docker-compose.yml
 ```
 
-The `node_modules/` directory is created locally after installing frontend dependencies. It is excluded from Git and therefore will not normally appear in the GitHub repository.
-
-The `.env` file must remain private. The `.env.example` file can be committed because it contains placeholder values rather than actual secrets.
+Additional folders such as `hooks/`, `context/`, `utils/`, `styles/`, `recruiter/`, and `admin/` can be populated as their features are implemented. `frontend/node_modules/`, `frontend/dist/`, and `backend/target/` are generated locally and should not be committed.
 
 ## Database Information
 
@@ -424,7 +433,7 @@ Confirm that the `.env` file exists and contains valid values.
 **Solution:** Run the following command inside `frontend/`:
 
 ```powershell
-npm.cmd install
+npm.cmd ci
 ```
 
 Then restart the development server:
@@ -453,48 +462,34 @@ Check the logs if the application does not start successfully.
 
 ## Version Control and Collaboration
 
-Git and GitHub are used to manage the source code and collaborate on development.
+Git and GitHub are used for group collaboration. The `main` branch is covered by an active branch ruleset; teammates without bypass permissions should use feature branches and pull requests rather than pushing directly to `main`.
 
 ### Before committing
 
-- Review `git status`.
-- Check the files being staged.
-- Ensure `.env` and other secrets are not staged.
-- Avoid committing generated folders such as `node_modules/`, `frontend/dist/`, and `backend/target/`.
-- Commit the source code and configuration templates needed by other developers.
+- Run `git status` and review the staged files.
+- Commit source files, images used by the app, `package.json`, `package-lock.json`, and `.env.example` templates.
+- Do **not** commit root or frontend `.env`, database passwords, `node_modules/`, `frontend/dist/`, or `backend/target/`.
+- Review unrelated temporary files (for example, a root `tmp/` folder) rather than staging them automatically.
 
-### Suggested workflow
+### Suggested team workflow
 
-1. Pull the latest changes from GitHub before starting work.
-2. Develop and test changes locally.
-3. Review the modified files.
-4. Commit meaningful changes with descriptive messages.
-5. Push the commits to GitHub.
-6. Coordinate shared changes to configuration and database-related files with teammates.
+1. Pull the latest `main` branch before starting work.
+2. Create a feature branch, such as `feature/jobseeker-ui` or `feature/recruiter-ui`.
+3. Implement and test the assigned changes locally (`npm.cmd run lint` for frontend changes).
+4. Commit with a descriptive message and push the feature branch.
+5. Open a pull request targeting `main` and follow the repository's review rules.
+6. After merging, everyone pulls the updated `main` branch. Run `npm.cmd ci` if frontend dependencies changed.
 
-Each developer should create their own local `.env` file based on `.env.example`. Never share private passwords through source control.
+Repository administrators or other authorized bypass users may have different permissions. Required approval counts are determined by the active ruleset, not by the number of teammates. Coordinate edits to shared files such as `AppRoutes.jsx`, `package.json`, and configuration files to reduce merge conflicts.
 
 ## Development Notes
 
-This repository represents the initial development setup for SkillBridge AI.
+The development environment and basic frontend navigation are ready. The UI prototype has been completed, and the team is starting to implement its pages in React. The frontend can be developed with temporary mock data while the backend APIs are still pending.
 
-The frontend currently uses the default React + Vite starter page. The backend currently contains the initial Spring Boot application and database connection configuration.
+**Implemented setup:** React + Vite, React Router with initial placeholder routes, Axios client configuration, ESLint, Spring Boot container, MySQL container, Docker Compose, and GitHub repository setup.
 
-The following areas remain open for future development and decisions:
+**Not yet implemented:** complete page designs, real login/registration, authorization and role protection, Spring Boot application APIs, application database entities, job recommendations and matching, skill-gap analysis, AI-assisted capabilities, learning roadmaps, and end-to-end integration.
 
-- Detailed requirements and final feature scope.
-- User interface design and page implementation.
-- Backend API development.
-- Authentication and role-based access.
-- Database entities and schema design.
-- Job recommendation and matching logic.
-- AI-assisted features and integrations.
-- Testing, deployment, and production configuration.
+The team should agree on API request/response formats before connecting the frontend to Spring Boot, but API endpoints do not need to be implemented during the initial UI design phase.
 
-The README will be updated as the project develops and these details are finalised.
-
----
-
-**Project:** SkillBridge AI  
-**Project Type:** Undergraduate Workshop II project  
-**Development Status:** Initial setup completed; application feature development pending.
+This README should be updated as features are completed.
