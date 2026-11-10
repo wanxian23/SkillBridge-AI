@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>SkillBridge AI</title>
+  <path d="M24 20v-5a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v5M53 27v-2a5 5 0 0 0-5-5H14a5 5 0 0 0-5 5v23a5 5 0 0 0 5 5h34a5 5 0 0 0 5-5v-3" fill="none" stroke="#173451" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24.5" cy="30.5" r="4.7" fill="#A95615"/>
+  <path d="M17.5 44c1.9-4 4.4-5.8 7.5-5.8 4.3 0 7.2 4 11.2 7.7L57 29.5" fill="none" stroke="#007D70" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
