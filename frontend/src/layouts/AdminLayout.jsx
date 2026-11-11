@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import Icon from '../components/admin/Icon'
 import '../styles/admin.css'
+import Footer from '../components/common/Footer'
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Admin overview', icon: 'home' },
@@ -35,18 +36,18 @@ export default function AdminLayout() {
         </nav>
 
         <div className="adm-sidebar-footer">
-          <p className="adm-demo-label">DEMO WORKSPACE</p>
+          <p className="adm-demo-label">CURRENT LOGIN</p>
           <p className="adm-demo-user">Platform administrator</p>
           {/* Sign out just returns to the login page until real authentication exists. */}
           <Link className="adm-signout" to="/login">
             <span>Sign out</span>
-            <Icon name="arrow" />
           </Link>
         </div>
       </aside>
 
       <main className="adm-main">
         <Outlet />
+        <Footer />
       </main>
     </div>
   )

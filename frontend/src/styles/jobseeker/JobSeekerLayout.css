@@ -1,0 +1,148 @@
+/* In your current Job Seeker code, these colours are defined:
+Colour code	Purpose
+#113D35	Dark green sidebar background
+#213547	Default text colour inherited from global styles
+#FFFFFF	Default page background
+
+
+Sources: [JobSeekerLayout.css (line 1)](D:/Project Development/skillbridge-ai/frontend/src/styles/jobseeker/JobSeekerLayout.css:1) and [index.css (line 1)](D:/Project Development/skillbridge-ai/frontend/src/index.css:1).
+
+Your exported logo also uses:
+Colour code	Purpose
+#173451	Navy briefcase outline
+#007D70	Teal person/checkmark stroke
+#A95615	Brown-orange person’s head */
+
+/* Header + Content (Right Side) */
+.jobseeker-main {
+    display: flex;
+    flex-direction: column;
+    margin-left: 226px; /* Width of the sidebar */
+    background-color: #f2f8f5;
+    min-height: 100vh; /* Ensure it takes full height */
+    padding: 10px 40px 0px 40px;
+    overflow-y: auto; /* Allow vertical scrolling if content overflows */
+    
+}
+
+/* Header Styling */
+.jobseeker-header {
+    color: #113D35;
+    display: flex;
+    justify-content: space-between;
+    user-select: none;
+}
+
+/* Sidebar Styling (Left Side) */
+.jobseeker-sidebar {
+    padding: 16px;
+    background-color: #113D35;
+    color: white;
+    width: 226px;
+    position: fixed;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.jobseeker-sidebar .jobseeker-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 26px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.jobseeker-sidebar h2 img {
+    width: 36px;
+    height: 36px;
+}
+
+.jobseeker-sidebar h3 {
+    font-size: 16px;
+    margin: 20px 0 10px 0;
+    color: #A6E8CD;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 15px;
+}
+
+.jobseeker-sidebar ul {
+    list-style-type: none;
+    padding: 10px 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.jobseeker-sidebar ul li {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    gap: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.jobseeker-sidebar .sidebar-menu-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask: var(--sidebar-icon) center / contain no-repeat;
+    mask: var(--sidebar-icon) center / contain no-repeat;
+}
+
+.jobseeker-sidebar ul li:hover {
+    background-color: #E3F5EB;
+    color: #113D35;
+}
+
+.jobseeker-sidebar ul li.active {
+    background-color: #E3F5EB;
+    color: #113D35;
+}
+
+.jobseeker-sidebar .logout-section {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.jobseeker-sidebar .logout-section h3 {
+    line-height: 1.5;
+}
+
+.jobseeker-sidebar .logout-section h3 span {
+    color: white;
+    font-size: small;
+}
+
+.jobseeker-sidebar .logout-section .logout-button {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 8px;
+    background-color: #E3F5EB;
+    color: #113D35;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.jobseeker-sidebar .logout-button:hover {
+    background-color: #D1E8D5;
+}
+

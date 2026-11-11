@@ -39,3 +39,6 @@ desktop.ini
 # Logs
 # ========================================
 *.log
+
+# Temporary checks and screenshots
+/tmp/

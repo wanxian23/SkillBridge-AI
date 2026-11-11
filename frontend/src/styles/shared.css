@@ -1,0 +1,10 @@
+
+/* Footer Styling */
+.footer {
+    margin-top: 30px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    color: #113D35;
+    user-select: none;
+    padding: 15px;
+}
