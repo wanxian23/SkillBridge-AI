@@ -34,11 +34,13 @@ import VacancyOutcomePage from '../pages/admin/VacancyOutcomePage'
 import LearningCataloguePage from '../pages/admin/LearningCataloguePage'
 import ResourceEditorPage from '../pages/admin/ResourceEditorPage'
 import SkillCategoriesPage from '../pages/admin/SkillCategoriesPage'
+import HrWorkspace from '../pages/hr/HrWorkspace'
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/hr/*" element={<HrWorkspace />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -97,3 +99,8 @@ export default function AppRoutes() {
     </BrowserRouter>
   )
 }
+
+
+
+
+
